@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <body class="flex flex-col items-center justify-center w-screen min-h-screen bg-gray-100 text-gray-800 py-4">
+
+        <!-- Component Start -->
+        <div class="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
+            <div class="flex flex-col flex-grow h-0 p-4 overflow-auto" id="messages">
+                <!-- <div class="flex w-full mt-2 space-x-3 max-w-xs">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                    <div>
+                        <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
+                            <p class="text-sm">How can I help you?</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none">2 min ago</span>
+                    </div>
+                </div>
+                <div class="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+                    <div>
+                        <div class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
+                            <p class="text-sm">What is the tallest building on the planet?</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none mt-2 float-right">2 min ago</span>
+                    </div>
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                </div>
+                <div class="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+                    <div>
+                        <div class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
+                            <p class="text-sm">And what is the height of it?</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none mt-2 float-right">2 min ago</span>
+                    </div>
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                </div>
+                <div class="flex w-full mt-2 space-x-3 max-w-xs">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                    <div>
+                        <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
+                            <p class="text-sm">The tallest building in the world in Burj Khalifa. It is 820m tall and situated in Dubai, UAE. </p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none">2 min ago</span>
+                    </div>
+                </div>
+        
+
+                <div class="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+                    <div>
+                        <div class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
+                            <p class="text-sm">Nice, send me a picture of that.</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none mt-2 float-right">2 min ago</span>
+                    </div>
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                </div>
+
+
+                <div class="flex w-full mt-2 space-x-3 max-w-xs">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                    <div>
+                        <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
+                            <img class="rounded cursor-pointer" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farabiahorizons.com%2Fblog%2Fwp-content%2Fuploads%2F2020%2F06%2FBurj-Khalifa-Floors.jpg" alt="">
+                            <p class="text-sm">Sure, here it is.</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none">2 min ago</span>
+                    </div>
+                </div>
+
+                <div class="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+                    <div>
+                        <div class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
+                            <p class="text-sm">Thanks.</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none mt-2 float-right">2 min ago</span>
+                    </div>
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                </div>
+
+                <div class="flex w-full mt-2 space-x-3 max-w-xs">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                    <div>
+                        <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
+                            <p class="text-sm">You are welcome.</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none">2 min ago</span>
+                    </div>
+                </div>
+
+
+                <div class="flex w-full mt-2 space-x-3 max-w-xs">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                    <div>
+                        <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
+                            <p class="text-sm">Do you need help with anything else?</p>
+                        </div>
+                        <span class="text-xs text-gray-500 leading-none">2 min ago</span>
+                    </div>
+                </div> -->
+
+
+            </div>
+            
+            <div class="bg-gray-300 p-4">
+                <form id="form" autocomplete="off">
+                    <input class="flex items-center h-10 w-full rounded px-3 text-sm" type="text" required id="message" name="message" placeholder="Type your query">
+                </form>
+            </div>
+        </div>
+        <!-- Component End  -->
+    
+    </body>
+    <script type="text/javascript">
+        let url = `ws://${window.location.host}/ws/socket-server/chat/`
+
+        const chatSocket = new WebSocket(url)
+
+        chatSocket.onmessage = function (e) {
+            let data = JSON.parse(e.data)
+            console.log('Data:', data)
+
+            if (data.type === 'chat') {
+                let messages = document.getElementById('messages')
+
+                messages.insertAdjacentHTML('beforeend',`
+                    <div class="flex w-full mt-2 space-x-3 max-w-xs">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                        <div>
+                            <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
+                                <p class="text-sm">${data.message}</p>
+                            </div>
+                            <span class="text-xs text-gray-500 leading-none">2 min ago</span>
+                        </div>
+                    </div>
+                `);
+            }
+        }
+
+        let form = document.getElementById('form')
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            let message = e.target.message.value
+            chatSocket.send(JSON.stringify({
+                'message': message,
+            }))
+            form.reset()
+        })
+
+    </script>
+</body>
+</html>
