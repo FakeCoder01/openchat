@@ -6,7 +6,7 @@ from channels.db import database_sync_to_async
 from .models import Message, Profile
 
 def HandleAPI(q):
-    openai.api_key = "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"
+    openai.api_key = "API_KEY"
 
     model_engine = "text-davinci-003"
     req = openai.Completion.create(
