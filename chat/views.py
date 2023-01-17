@@ -59,6 +59,9 @@ def login_user(request):
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
+            if not Profile.objects.filter(user=user).exists():
+                messages.success(request, "Account not suitable")
+                return redirect('/login')
             messages.success(request, "Login successful")
             return redirect('/')
         messages.error(request, "Invalid credentials")        
