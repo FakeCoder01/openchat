@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,38 +9,53 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/258973f2c5.js" crossorigin="anonymous"></script>
 </head>
+
+
+
 <body>
-    <body class="flex flex-col items-center justify-center w-screen min-h-screen bg-gray-100 text-gray-800 py-4">
+    <header>
+        <nav class="bg-white fixed top-0 left-0 right-0 z-10 opacity-70">
+            <div class="flex items-center justify-between px-4 py-3">
+                <a href="#" class="text-black font-medium"><i class="fa-solid fa-arrow-left"></i>&emsp; ChatBOT</a>
+                <button type="submit" onclick="window.location.href='/logout';"
+                    class="block rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-white mr-4"> Log out
+                </button>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <body class="flex flex-col items-center w-screen min-h-screen bg-gray-100 text-gray-800 py-4">
 
         {% if messages %}
-            <div class="alerts-list absolute top-0 mt-4 left-0 ml-4">
-                {% for message in messages %}
-                <div onclick="this.style.display='none';"
-                    class="p-2 bg-blue-200 text-blue-800 cursor-pointer p-4 text-sm rounded border border-blue-300 my-3">
-                    {{message}}
-                </div>
-                {% endfor %}
+        <div class="alerts-list absolute top-0 mt-4 left-0 ml-4">
+            {% for message in messages %}
+            <div onclick="this.style.display='none';"
+                class="p-2 bg-blue-200 text-blue-800 cursor-pointer p-4 text-sm rounded border border-blue-300 my-3">
+                {{message}}
             </div>
+            {% endfor %}
+        </div>
         {% endif %}
 
-        <button type="submit" onclick="window.location.href='/logout';" style="right: 0; top:0; position: fixed;"
-            class="block rounded-lg bg-red-600 px-5 py-3 text-sm font-medium text-white mr-4 mt-4"> Log out
-        </button>
+
 
         <!-- Component Start -->
-        <div class="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
+        <div class="flex flex-col flex-grow w-[80%] bg-white shadow-xl rounded-lg overflow-hidden">
             <div class="flex flex-col flex-grow h-0 p-4 overflow-auto rounded-lg" id="messages"> </div>
-                
+
             <div class="bg-gray-300 p-4">
                 <form id="form" class="flex items-center" autocomplete="off">
-                    <input class="flex items-center h-10 w-full rounded px-3 mr-3 text-sm" type="text" required id="message" name="message" placeholder="Type your query ">
+                    <input class="flex items-center h-10 w-full rounded px-3 mr-3 text-sm" type="text" required
+                        id="message" name="message" placeholder="Type your query ">
                     <button type="submit" class="hover:cursor-pointer"><i class="fa-solid fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>
         <!-- Component End  -->
 
-    
+
     </body>
     <script type="text/javascript">
 
@@ -55,8 +71,8 @@
             if (data.type === 'chat') {
                 let messages = document.getElementById('messages');
 
-                if(data.sent_by === 'user'){
-                    messages.insertAdjacentHTML('beforeend',`
+                if (data.sent_by === 'user') {
+                    messages.insertAdjacentHTML('beforeend', `
                     <div class="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
                         <div>
                             <div class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
@@ -67,8 +83,8 @@
                         <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
                     </div>
                     `);
-                }else{
-                    messages.insertAdjacentHTML('beforeend',`
+                } else {
+                    messages.insertAdjacentHTML('beforeend', `
                         <div class="flex w-full mt-2 space-x-3 max-w-xs">
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
                             <div>
@@ -91,12 +107,13 @@
             let message = e.target.message.value
             chatSocket.send(JSON.stringify({
                 'message': message,
-                'sent_by' : 'user',
-                'user' : '{{request.user.userprofile.p_id}}'
+                'sent_by': 'user',
+                'user': '{{request.user.userprofile.p_id}}'
             }))
             form.reset()
         })
 
     </script>
 </body>
+
 </html>
