@@ -2,8 +2,22 @@ import json, openai
 from urllib.parse import parse_qsl
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from channels.db import database_sync_to_async
 from .models import Message, Profile
+from PyPDF2 import PdfReader
+import base64, os, uuid
+
+def PdfToTextConvert(pdfile):
+    reader = PdfReader(pdfile)
+    pdfText = ""
+    for i in range(len(reader.pages)):
+        page = reader.pages[i]
+        text = page.extract_text()
+        pdfText += text
+    print(pdfText)    
+    return pdfText
+
+
+
 
 def HandleAPI(q):
     openai.api_key = "API_KEY"
@@ -12,14 +26,14 @@ def HandleAPI(q):
     req = openai.Completion.create(
         engine=model_engine, 
         prompt=str(q), 
-        max_tokens=200, 
+        max_tokens=2000, 
         n=1, 
         stop=None, 
         temperature=0
     )
     response = str(req.choices[0].text)
     response = response.replace("\n", "<br>")
-
+    # print(response)
     return response
 
 
@@ -40,18 +54,16 @@ class ChatConsumer(WebsocketConsumer):
 
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        sent_by = text_data_json['sent_by']
-        user = text_data_json['user']
-        
+        data = json.loads(text_data)
+        message = data['message']
+        sent_by = data['sent_by']
+
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type':'chat_message',
                 'message': message,
                 'sent_by' : sent_by
-
             }
         )
         
@@ -60,7 +72,7 @@ class ChatConsumer(WebsocketConsumer):
     def chat_message(self, event):
         message = event['message']
         sent_by = event['sent_by']
-        user = event['user']
+        # user = event['user']
 
         self.send(text_data=json.dumps({
             'type':'chat',
