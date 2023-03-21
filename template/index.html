@@ -153,8 +153,8 @@
 
         if(document.getElementById("file_input").value != ""){
             // upload the file
-            
-            
+            let pdf = {message}
+            console.log(message);
         }else{
             let message = e.target.message.value
             chatSocket.send(JSON.stringify({
