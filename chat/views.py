@@ -67,3 +67,25 @@ def login_user(request):
         messages.error(request, "Invalid credentials")        
         return redirect("/login?msg=invalid credentials")    
     return render(request, 'login.html')
+
+
+# Pdf upload
+def upload_pdf(request):
+    if request.method == 'POST' and request.FILES['pdf_file']:
+        # Retrieve the uploaded PDF file from the request
+        pdf_file = request.FILES['pdf_file']
+        
+        # Get the username of the user who uploaded the file
+        username = request.user.username
+        
+        # Store the PDF file in a variable or do something with it here
+        # For example, you could save it to disk:
+        # with open('uploaded_files/' + pdf_file.name, 'wb') as f:
+        #     f.write(pdf_file.read())
+        
+        # Set the success message to be displayed on the index page
+        message = f'{pdf_file.name} uploaded successfully by {username}.'
+        
+        # Pass the success message and username as context to the index template
+    return render(request, 'index.html', {'message': message, 'username': username})
+    

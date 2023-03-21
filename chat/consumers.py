@@ -20,7 +20,7 @@ def PdfToTextConvert(pdfile):
 
 
 def HandleAPI(q):
-    openai.api_key = "API_KEY"
+    openai.api_key = "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"
 
     model_engine = "text-davinci-003"
     req = openai.Completion.create(
