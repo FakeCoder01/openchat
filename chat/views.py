@@ -5,7 +5,7 @@ from django.contrib import messages
 from .models import Profile
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
-import json
+import json, PyPDF2
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from .consumers import construct_index
@@ -13,8 +13,9 @@ from .consumers import construct_index
 
 # Create your views here.
 
+def home(request):
+    return render(request, 'home.html')
 
-@login_required(login_url='/login')
 def index(request):
     return render(request, 'index.html')
 
@@ -56,23 +57,35 @@ def logout_user(request):
     return redirect('/')
 
 
-
 def handleFileUpload(request):
     if request.method == 'POST' and request.FILES['pdf_file']:
         uploaded_file = request.FILES['pdf_file']
-        # filters
+        if uploaded_file.name.endswith('.pdf'):
+            with uploaded_file.open('rb') as f:
+                pdf_reader = PyPDF2.PdfReader(f)
+                num_pages = len(pdf_reader.pages)
+                if num_pages > 5:
 
-        fs = FileSystemStorage()
-        filename = fs.save(uploaded_file.name, uploaded_file)
-        file_url = fs.url(filename)
-        construct_index("media/")
+                    return JsonResponse(json.dumps({
+                        "status_code" : 402,
+                        "message" : "FAIL : max_size_exceeded (max 5 pages)"
+                    }), safe=False)
+
+                fs = FileSystemStorage()
+                filename = fs.save(uploaded_file.name, uploaded_file)
+                file_url = fs.url(filename)
+                construct_index("media/")
+                return JsonResponse(json.dumps({
+                    "status_code" : 200,
+                    "message" : "File Uploaded"
+                }), safe=False)
         return JsonResponse(json.dumps({
-            "statius_code" : 200,
-            "message" : "success"
-        }), safe=False)
+            "status_code" : 403,
+            "message" : "FAIL : file_not_pdf"
+        }), safe=False) 
     return JsonResponse(json.dumps({
-        "statius_code" : 400,
-        "message" : "fail"
+        "status_code" : 403,
+        "message" : "FAIL"
     }), safe=False) 
 
 

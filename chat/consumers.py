@@ -1,29 +1,17 @@
-import json, openai
+import json, os
 from urllib.parse import parse_qsl
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from .models import Message, Profile
-from PyPDF2 import PdfReader
-import base64, os, uuid
-
-
-
 from gpt_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
 from langchain import OpenAI
 
-os.environ["OPENAI_API_KEY"] = "KEY"
-
+os.environ["OPENAI_API_KEY"] = "API_KEY"
 def construct_index(directory_path):
-    # set maximum input size
     max_input_size = 4096
-    # set number of output tokens
     num_outputs = 256
-    # set maximum chunk overlap
     max_chunk_overlap = 20
-    # set chunk size limit
     chunk_size_limit = 600
 
-    # define LLM
     llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=num_outputs))
     prompt_helper = PromptHelper(max_input_size, num_outputs, max_chunk_overlap, chunk_size_limit=chunk_size_limit)
  
@@ -34,7 +22,6 @@ def construct_index(directory_path):
     )
 
     index.save_to_disk('index.json')
-
     return index
 
 def ask_lenny(query):
@@ -43,11 +30,8 @@ def ask_lenny(query):
     while True: 
         response = index.query(query, response_mode="compact")
         return response.response
-
-
-
+    
 class ChatConsumer(WebsocketConsumer):
-
     def connect(self):
         query_params = dict(parse_qsl(self.scope['query_string'].decode('utf-8')))
         group = str(query_params['room_id'])
@@ -58,7 +42,6 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
-
 
     def receive(self, text_data):
         data = json.loads(text_data)
@@ -74,8 +57,6 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
         
-        
-
     def chat_message(self, event):
         message = event['message']
         sent_by = event['sent_by']
