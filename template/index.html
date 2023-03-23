@@ -47,6 +47,7 @@
                         <label class="cursor-pointer mr-2" for="file_input">
                             <i id="btnIcon" class="fa-sharp fa-regular fa-file-pdf fa-xl text-[#3c3adf]"></i>
                         </label>
+                        {% csrf_token %}
                         <input type="file" onchange="fileBTNCHANGE()" name="pdf_file" id="file_input" style="width: 0px;">
                     </div>
                 </form>    
@@ -153,15 +154,35 @@
 
         if(document.getElementById("file_input").value != ""){
             // upload the file
-            
+
+            const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            const fileInput = document.getElementById('file_input');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', csrfToken);
+            formData.append('pdf_file', file);
+
+            fetch('/upload/file/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => console.log(response))
+            .then(data => sendMessage("File uploaded"))
+            // .then(response => response.json())
+            .catch(error => console.error(error));
             
         }else{
             let message = e.target.message.value
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'sent_by' : 'user',
-                'user' : '{{request.user.userprofile.p_id}}',
-            }))
+            if (message != ''){
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'sent_by' : 'user',
+                    'user' : '{{request.user.userprofile.p_id}}',
+                }))
+            }    
         }
 
         

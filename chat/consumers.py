@@ -6,36 +6,43 @@ from .models import Message, Profile
 from PyPDF2 import PdfReader
 import base64, os, uuid
 
-def PdfToTextConvert(pdfile):
-    reader = PdfReader(pdfile)
-    pdfText = ""
-    for i in range(len(reader.pages)):
-        page = reader.pages[i]
-        text = page.extract_text()
-        pdfText += text
-    print(pdfText)    
-    return pdfText
 
 
+from gpt_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
+from langchain import OpenAI
 
+os.environ["OPENAI_API_KEY"] = "KEY"
 
-def HandleAPI(q):
-    openai.api_key = "API_KEY"
+def construct_index(directory_path):
+    # set maximum input size
+    max_input_size = 4096
+    # set number of output tokens
+    num_outputs = 256
+    # set maximum chunk overlap
+    max_chunk_overlap = 20
+    # set chunk size limit
+    chunk_size_limit = 600
 
-    model_engine = "text-davinci-003"
-    req = openai.Completion.create(
-        engine=model_engine, 
-        prompt=str(q), 
-        max_tokens=2000, 
-        n=1, 
-        stop=None, 
-        temperature=0
+    # define LLM
+    llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=num_outputs))
+    prompt_helper = PromptHelper(max_input_size, num_outputs, max_chunk_overlap, chunk_size_limit=chunk_size_limit)
+ 
+    documents = SimpleDirectoryReader(directory_path).load_data()
+    
+    index = GPTSimpleVectorIndex(
+        documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
     )
-    response = str(req.choices[0].text)
-    response = response.replace("\n", "<br>")
-    # print(response)
-    return response
 
+    index.save_to_disk('index.json')
+
+    return index
+
+def ask_lenny(query):
+    
+    index = GPTSimpleVectorIndex.load_from_disk('index.json')
+    while True: 
+        response = index.query(query, response_mode="compact")
+        return response.response
 
 
 
@@ -81,7 +88,7 @@ class ChatConsumer(WebsocketConsumer):
         }))  
 
         if sent_by == 'user':
-            txt = HandleAPI(message)
+            txt = ask_lenny(message)
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {

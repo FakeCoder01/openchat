@@ -5,14 +5,18 @@ from django.contrib import messages
 from .models import Profile
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
+import json
+from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+from .consumers import construct_index
+
+
 # Create your views here.
 
 
 @login_required(login_url='/login')
 def index(request):
     return render(request, 'index.html')
-
-
 
 
 def signup_user(request):
@@ -50,6 +54,26 @@ def logout_user(request):
     logout(request)
     messages.success(request, 'Successfully logged out')
     return redirect('/')
+
+
+
+def handleFileUpload(request):
+    if request.method == 'POST' and request.FILES['pdf_file']:
+        uploaded_file = request.FILES['pdf_file']
+        # filters
+
+        fs = FileSystemStorage()
+        filename = fs.save(uploaded_file.name, uploaded_file)
+        file_url = fs.url(filename)
+        construct_index("media/")
+        return JsonResponse(json.dumps({
+            "statius_code" : 200,
+            "message" : "success"
+        }), safe=False)
+    return JsonResponse(json.dumps({
+        "statius_code" : 400,
+        "message" : "fail"
+    }), safe=False) 
 
 
 def login_user(request):

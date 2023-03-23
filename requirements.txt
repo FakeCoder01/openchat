@@ -1,0 +1,9 @@
+django
+requests
+daphane
+openai
+urllib
+django-channels
+PyPDF2
+gpt_index
+langchain
