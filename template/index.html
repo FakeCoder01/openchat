@@ -108,7 +108,7 @@
         }
         
         // Function to process the user's message and generate a response
-        function ProcessTheMessage(message, buttons) {
+        function ProcessTheMessage(message, buttons={"btn1" : "", "btn2" : "", "btn3" : "" }) {
             // Placeholder code - replace with your own logic to generate a response
             return `
                 <div class="text-gray-700 p-1">
@@ -161,6 +161,7 @@
             const formData = new FormData();
             formData.append('csrfmiddlewaretoken', csrfToken);
             formData.append('pdf_file', file);
+            formData.append('room_id', room_id);
 
             fetch('/upload/file/', {
                 method: 'POST',
@@ -174,6 +175,9 @@
                 
                 result = JSON.parse(result) ;
                 sendMessage(result.message);
+                if(result.status_code === 200){
+                    responseBotMessage(result.user_msg);
+                }
             })
             .catch(error => console.error(error));
             

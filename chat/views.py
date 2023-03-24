@@ -58,14 +58,13 @@ def logout_user(request):
 
 
 def handleFileUpload(request):
-    if request.method == 'POST' and request.FILES['pdf_file']:
+    if request.method == 'POST' and request.FILES['pdf_file'] and request.POST['room_id']:
         uploaded_file = request.FILES['pdf_file']
         if uploaded_file.name.endswith('.pdf'):
             with uploaded_file.open('rb') as f:
                 pdf_reader = PyPDF2.PdfReader(f)
                 num_pages = len(pdf_reader.pages)
-                if num_pages > 5:
-
+                if num_pages > 20:
                     return JsonResponse(json.dumps({
                         "status_code" : 402,
                         "message" : "FAIL : max_size_exceeded (max 5 pages)"
@@ -77,7 +76,8 @@ def handleFileUpload(request):
                 construct_index("media/")
                 return JsonResponse(json.dumps({
                     "status_code" : 200,
-                    "message" : "File Uploaded"
+                    "message" : "File Uploaded",
+                    "user_msg" : f"Your file <b>'{uploaded_file.name}'</b> has been uploaded. You can now chat with it.",
                 }), safe=False)
         return JsonResponse(json.dumps({
             "status_code" : 403,
