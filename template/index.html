@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  id="print_chat_details">
 
 <head>
     <meta charset="UTF-8">
@@ -15,9 +15,9 @@
         <!-- Header section -->
         <div
             class="bg-gradient-to-br from-indigo-200 to-green-100 px-4 py-3 flex justify-between items-center rounded-t-xl">
-            <h3 class="text-lg font-bold text-gray-800 font-mono">Comprehension Analyzer</h3>
+            <h3 class="text-lg font-bold text-gray-800 font-mono">Talk to PDF</h3>
             <div class="flex items-center space-x-4">
-                <button class="p-2">
+                <button class="p-2" onclick="export_chat_to_pdf();">
                     <i class="fas fa-share text-gray-600 hover:text-gray-900"></i>
                 </button>
                 <button class="p-2" onclick="CopyResponse(this);">
@@ -55,7 +55,9 @@
         </div>
     </div>
 
-    <script>
+</body>
+
+<script>
 
        
 
@@ -162,6 +164,7 @@
             formData.append('csrfmiddlewaretoken', csrfToken);
             formData.append('pdf_file', file);
             formData.append('room_id', room_id);
+            sendMessage("File uploaded");
 
             fetch('/upload/file/', {
                 method: 'POST',
@@ -174,7 +177,7 @@
             .then((result) => {
                 
                 result = JSON.parse(result) ;
-                sendMessage(result.message);
+                
                 if(result.status_code === 200){
                     responseBotMessage(result.user_msg);
                 }
@@ -199,8 +202,16 @@
     });
 
 
+    function export_chat_to_pdf() {
+            var divContents = document.getElementById("print_chat_details").innerHTML;
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write(divContents);
+            a.document.close();
+            a.print();
+        }
+
 </script>
 
-</body>
+
 
 </html>

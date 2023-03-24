@@ -5,7 +5,7 @@ from asgiref.sync import async_to_sync
 from gpt_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
 from langchain import OpenAI
 
-os.environ["OPENAI_API_KEY"] = "KEY"
+os.environ["OPENAI_API_KEY"] = "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"
 def construct_index(directory_path):
     max_input_size = 4096
     num_outputs = 256
