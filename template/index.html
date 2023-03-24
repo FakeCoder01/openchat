@@ -125,7 +125,7 @@
         }
 
 
-    const room_id = `{{request.user.userprofile.room_id}}`;
+    const room_id = (Math.random() + 1).toString(36).substring(7);
     let url = `ws://${window.location.host}/ws/socket-server/chat/?room_id=${room_id}`
 
     const chatSocket = new WebSocket(url)
@@ -190,7 +190,7 @@
                 chatSocket.send(JSON.stringify({
                     'message': message,
                     'sent_by' : 'user',
-                    'user' : '{{request.user.userprofile.p_id}}',
+                    'user' : room_id,
                 }))
             }    
         }

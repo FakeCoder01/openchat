@@ -1,26 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with PDF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/258973f2c5.js" crossorigin="anonymous"></script>
+    <title>Talk to pdf</title>
 </head>
-<body>
-    <div style="display: block; margin: auto;">
-        <h1>WELCOME....</h1>
 
-        <h3>Chat with your PDF</h3>
-
-        <h1><a href="/chat?utc_source=landing">CHAT NOW</a></h1>
-
-        <h4>Instructions</h4>
-        <ul>
-            <li>Upload the PDF</li>
-            <li>Ask any question</li>
-            <li>Question can or can not be from the PDF</li>
-            <li>PDF should have maximum of <b>five pages</b> or less</li>
-        </ul>
+<body class="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100">
+    <div class="px-28 py-7 flex flex-col items-center justify-center text-center">
+        <h1 class="text-4xl font-semibold p-5">Talk to any PDF</h1>
+        <div class="p-3 flex">
+            <div class="px-2 py-1 m-2 font-mono border-2 border-black hover:bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 cursor-pointer">
+                <i class="fa-brands fa-discord"></i>
+                <a href="">Join Discord</a>
+            </div>
+            <div class="px-2 py-1 m-2 font-mono border-2 border-black hover:bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 cursor-pointer">
+                <i class="fa-brands fa-twitter"></i>
+                <a href="">Post to Twitter</a>
+            </div>
+            <div class="px-2 py-1 m-2 font-mono border-2 border-black hover:bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 cursor-pointer">
+                <i class="fa-brands fa-facebook-f"></i>
+                <a href="">Share on Facebook</a>
+            </div>
+        </div>
+        <div class="drop-box w-9/12 h-52 border-2 border-dashed bg-[#F9F6EE] border-gray-400 flex justify-center items-center text-xl rounded-lg"
+            ondrop="handleDrop(event)" ondragover="event.preventDefault()">
+            <div class="flex flex-col justify-center items-center">
+                <span class="text-base font-semibold">Drop PDF here &nbsp; <i class="fa-regular fa-file-pdf"></i></span>
+                <input type="file" accept=".pdf" class="file-input mt-4 ml-24 text-lg" onchange="handleFileSelect(event)">
+                <div id="upload-status" class="upload-status mx-4 text-gray-600 font-semibold text-sm py-2"></div>
+            </div>
+        </div>
     </div>
+
+    <div class="flex px-36 justify-between w-[100%]">
+        <div class="bg-[#F9F6EE] p-5 rounded-md w-[32%]">
+            <h2 class="font-semibold text-lg py-5">For Students 👨‍🎓</h2>
+            <hr>
+            <p class="py-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa est dolore blanditiis
+                molestiae. Molestias hic velit beatae. Repudiandae officiis tempora est deleniti tenetur rerum aliquid
+                iusto, delectus debitis vero excepturi quae, doloribus temporibus perspiciatis.
+            </p>
+        </div>
+        <div class="bg-[#F9F6EE] p-5 rounded-md w-[32%]">
+            <h2 class="font-semibold text-lg py-5">For Work ✍</h2>
+            <hr>
+            <p class="py-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa est dolore blanditiis
+                molestiae. Molestias hic velit beatae. Repudiandae officiis tempora est deleniti tenetur rerum aliquid
+                iusto, delectus debitis vero excepturi quae, doloribus temporibus perspiciatis.
+            </p>
+        </div>
+        <div class="bg-[#F9F6EE] p-5 rounded-md w-[32%]">
+            <h2 class="font-semibold text-lg py-5">For Curious Minds 🤔</h2>
+            <hr>
+            <p class="py-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa est dolore blanditiis
+                molestiae. Molestias hic velit beatae. Repudiandae officiis tempora est deleniti tenetur rerum aliquid
+                iusto, delectus debitis vero excepturi quae, doloribus temporibus perspiciatis.
+            </p>
+        </div>
+    </div>
+
+
+    <footer class="flex justify-center p-5">
+        <div class="flex justify-around w-[30%]">
+            <a href="" class="font-mono text-gray-500">My Account</a>
+            -
+            <a href="" class="font-mono text-gray-500">Pricing</a>
+            -
+            <a href="" class="font-mono text-gray-500">Twiiter</a>
+            -
+            <a href="" class="font-mono text-gray-500">Contact</a>
+            -
+            <a href="" class="font-mono text-gray-500">Policy</a>
+        </div>
+    </footer>
+
+    <script>
+        function handleDrop(e) {
+            e.preventDefault();
+            let files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let pdfData = e.target.result;
+                    // do something with the PDF data here
+                    console.log(pdfData);
+                };
+                reader.readAsDataURL(files[0]);
+                document.getElementById("upload-status").textContent = "File uploaded: " + files[0].name;
+            } else {
+                alert('Please drop a PDF file.');
+            }
+        }
+
+        function handleFileSelect(e) {
+            let files = e.target.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let pdfData = e.target.result;
+                    // do something with the PDF data here
+                    console.log(pdfData);
+                };
+                reader.readAsDataURL(files[0]);
+                document.getElementById("upload-status").textContent = "File uploaded: " + files[0].name;
+            } else {
+                alert('Please select a PDF file.');
+            }
+        }
+    </script>
 </body>
+
 </html>
