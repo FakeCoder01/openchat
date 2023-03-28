@@ -28,7 +28,7 @@
                     <span class="text-base font-semibold">Drop PDF here &nbsp; <i
                             class="fa-regular fa-file-pdf"></i></span>
                     <input id="pdf_file" type="file" accept="application/pdf" class="file-input mt-4 ml-24 text-lg"
-                        onchange="handleDrop(event)">
+                        onchange="handleFileSelect(event)">
                     <div id="upload-status" class="upload-status mx-4 text-gray-600 font-semibold text-sm py-2"></div>
                 </div>
             </form>
@@ -44,7 +44,45 @@
     <script>
 
         const room_id = (Math.random() + 1).toString(36).substring(7);
+
+        // For Drag and Drop
         function handleDrop(e) {
+            e.preventDefault();
+            if (1) {
+                const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+                let files = e.dataTransfer.files;
+                let pdfFile = files[0];
+                const formData = new FormData();
+                formData.append('csrfmiddlewaretoken', csrfToken);
+                formData.append('pdf_file', pdfFile);
+                formData.append('room_id', room_id);
+                document.getElementById("upload-status").textContent = "File uploaded: " + pdfFile.name + "\n(Analyzing...)";
+
+                fetch('/upload/file/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: formData
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+
+                        result = JSON.parse(result);
+
+                        if (result.status_code === 200) {
+                            window.location.href = result.redirect_url + "&utm_source=LANDING_FILE_UPLOAD"
+                        }
+                        else {
+                            alert(result.message)
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        }
+
+        // For file select
+        function handleFileSelect(e) {
             e.preventDefault();
             if (1) {
                 const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
@@ -54,7 +92,7 @@
                 formData.append('csrfmiddlewaretoken', csrfToken);
                 formData.append('pdf_file', file);
                 formData.append('room_id', room_id);
-                // document.getElementById("upload-status").textContent = "File uploaded: " + file.name + "\n(Analyzing...)";
+                document.getElementById("upload-status").textContent = "File uploaded: " + file.name + "\n(Analyzing...)";
 
                 fetch('/upload/file/', {
                     method: 'POST',

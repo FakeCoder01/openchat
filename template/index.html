@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  id="print_chat_details">
+<html lang="en" id="print_chat_details">
 
 <head>
     <meta charset="UTF-8">
@@ -48,9 +48,10 @@
                             <i id="btnIcon" class="fa-sharp fa-regular fa-file-pdf fa-xl text-[#3c3adf]"></i>
                         </label>
                         {% csrf_token %}
-                        <input type="file" accept="application/pdf" onchange="fileBTNCHANGE()" name="pdf_file" id="file_input" style="width: 0px;">
+                        <input type="file" accept="application/pdf" onchange="fileBTNCHANGE()" name="pdf_file"
+                            id="file_input" style="width: 0px;">
                     </div>
-                </form>    
+                </form>
             </div>
         </div>
     </div>
@@ -59,60 +60,60 @@
 
 <script>
 
-       
 
-        function ClearInputArea(){
-            document.getElementById("message").value = "";
-            document.getElementById("file_input").value = "";
-            fileBTNCHANGE();
+
+    function ClearInputArea() {
+        document.getElementById("message").value = "";
+        document.getElementById("file_input").value = "";
+        fileBTNCHANGE();
+    }
+
+    function fileBTNCHANGE() {
+        if (document.getElementById("file_input").value != "") {
+            document.getElementById("btnIcon").style.color = "red";
+        } else {
+            document.getElementById("btnIcon").style.color = "#3c3adf";
         }
+    }
 
-        function fileBTNCHANGE() {
-            if(document.getElementById("file_input").value != ""){
-                document.getElementById("btnIcon").style.color = "red";
-            }else{
-                document.getElementById("btnIcon").style.color = "#3c3adf";
-            }
-        }
-
-        function CopyResponse(){
-            const elements = document.querySelectorAll(".bot-response-copy"); // select all elements
-            const lastElement = elements[elements.length - 1]; 
-            navigator.clipboard.writeText(lastElement.innerText)
-            .then(() => document.getElementById("cpybtn").style.color = "blue" )
+    function CopyResponse() {
+        const elements = document.querySelectorAll(".bot-response-copy"); // select all elements
+        const lastElement = elements[elements.length - 1];
+        navigator.clipboard.writeText(lastElement.innerText)
+            .then(() => document.getElementById("cpybtn").style.color = "blue")
             .catch((error) => console.error(error))
 
-        }
-        
+    }
 
-        // Get references to the chat history container, input field, and send button
-        const chatHistory = document.querySelector('.chat-history');
-        // Function to send a message
-        function sendMessage(message) {
-            // Add the user's message to the chat history container
-            const userMessage = `
+
+    // Get references to the chat history container, input field, and send button
+    const chatHistory = document.querySelector('.chat-history');
+    // Function to send a message
+    function sendMessage(message) {
+        // Add the user's message to the chat history container
+        const userMessage = `
                 <div class="flex items-center justify-end mt-2">
                 <div class="rounded-3xl bg-indigo-400 text-white py-2 px-4 mr-2">${message}</div>
                 <div class="text-gray-400 text-sm font-semibold">${new Date().toLocaleTimeString([], { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
                 </div>
             `;
-            chatHistory.insertAdjacentHTML('beforeend', userMessage);
-        }
+        chatHistory.insertAdjacentHTML('beforeend', userMessage);
+    }
 
-        function responseBotMessage(message, buttons){
-            const botResponse = `
+    function responseBotMessage(message, buttons) {
+        const botResponse = `
                 <div class="flex items-center mt-2 bot-response-copy">
                     <div class="rounded-3xl bg-gray-200 text-gray-900 py-2 px-4 ml-2 mr-2">${ProcessTheMessage(message, buttons)}</div>
                     <div class="text-gray-400 text-sm font-semibold">${new Date().toLocaleTimeString([], { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
                 </div>
                 `;
-            chatHistory.insertAdjacentHTML('beforeend', botResponse);
-        }
-        
-        // Function to process the user's message and generate a response
-        function ProcessTheMessage(message, buttons={"btn1" : "", "btn2" : "", "btn3" : "" }) {
-            // Placeholder code - replace with your own logic to generate a response
-            return `
+        chatHistory.insertAdjacentHTML('beforeend', botResponse);
+    }
+
+    // Function to process the user's message and generate a response
+    function ProcessTheMessage(message, buttons = { "btn1": "", "btn2": "", "btn3": "" }) {
+        // Placeholder code - replace with your own logic to generate a response
+        return `
                 <div class="text-gray-700 p-1">
                     <p class="my-2 mb-3">${message}</p>
                     <!-- <div class="flex justify-center space-x-4">
@@ -122,10 +123,16 @@
                     </div> -->
                 </div>
             `;
-        }
+    }
 
 
-    const room_id = (Math.random() + 1).toString(36).substring(7);
+    let room_id = (Math.random() + 1).toString(36).substring(7);
+    const url_string = window.location.href;
+    let uri = new URL(url_string);
+    if (uri.searchParams.get("state") != "") 
+    {
+        room_id = uri.searchParams.get("state");
+    }
     let url = `ws://${window.location.host}/ws/socket-server/chat/?room_id=${room_id}`
 
     const chatSocket = new WebSocket(url)
@@ -137,13 +144,13 @@
         if (data.type === 'chat') {
             let messages = document.getElementById('messages');
 
-            if(data.sent_by === 'user'){
-                sendMessage(data.message) ;
-            }else{
+            if (data.sent_by === 'user') {
+                sendMessage(data.message);
+            } else {
                 buttons = {
-                    "btn1" : "Summarize",
-                    "btn2" : "Table of Contents",
-                    "btn3" :  "Q & A"
+                    "btn1": "Summarize",
+                    "btn2": "Table of Contents",
+                    "btn3": "Q & A"
                 }
                 responseBotMessage(data.message, buttons);
             }
@@ -154,7 +161,7 @@
     form.addEventListener('submit', (e) => {
         e.preventDefault()
 
-        if(document.getElementById("file_input").value != ""){
+        if (document.getElementById("file_input").value != "") {
             // upload the file
 
             const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
@@ -173,42 +180,42 @@
                 },
                 body: formData
             })
-            .then((response) => response.json())
-            .then((result) => {
-                
-                result = JSON.parse(result) ;
-                
-                if(result.status_code === 200){
-                    responseBotMessage(result.user_msg);
-                }
-            })
-            .catch(error => console.error(error));
-            
-        }else{
+                .then((response) => response.json())
+                .then((result) => {
+
+                    result = JSON.parse(result);
+
+                    if (result.status_code === 200) {
+                        responseBotMessage(result.user_msg);
+                    }
+                })
+                .catch(error => console.error(error));
+
+        } else {
             let message = e.target.message.value
-            if (message != ''){
+            if (message != '') {
                 chatSocket.send(JSON.stringify({
                     'message': message,
-                    'sent_by' : 'user',
-                    'user' : room_id,
+                    'sent_by': 'user',
+                    'user': room_id,
                 }))
-            }    
+            }
         }
 
-        
 
-        
+
+
         form.reset()
     });
 
 
     function export_chat_to_pdf() {
-            var divContents = document.getElementById("print_chat_details").innerHTML;
-            var a = window.open('', '', 'height=500, width=500');
-            a.document.write(divContents);
-            a.document.close();
-            a.print();
-        }
+        var divContents = document.getElementById("print_chat_details").innerHTML;
+        var a = window.open('', '', 'height=500, width=500');
+        a.document.write(divContents);
+        a.document.close();
+        a.print();
+    }
 
 </script>
 
