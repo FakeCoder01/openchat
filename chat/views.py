@@ -78,6 +78,7 @@ def handleFileUpload(request):
                     "status_code" : 200,
                     "message" : "File Uploaded",
                     "user_msg" : f"Your file <b>'{uploaded_file.name}'</b> has been uploaded. You can now chat with it.",
+                    "redirect_url" : f"/chat?state={request.POST['room_id']}"
                 }), safe=False)
         return JsonResponse(json.dumps({
             "status_code" : 403,
