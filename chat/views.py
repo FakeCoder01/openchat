@@ -8,8 +8,7 @@ from django.utils.crypto import get_random_string
 import json, PyPDF2
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
-from .consumers import construct_index
-
+from .file_handler import file_upload_handler
 
 # Create your views here.
 
@@ -71,15 +70,16 @@ def handleFileUpload(request):
                     }), safe=False)
 
                 fs = FileSystemStorage()
-                filename = fs.save(uploaded_file.name, uploaded_file)
+                f_name = str(request.POST['room_id']).replace(" ", "")
+                filename = fs.save(f"{f_name}.pdf", uploaded_file)
                 file_url = fs.url(filename)
-                construct_index("media/")
-                return JsonResponse(json.dumps({
-                    "status_code" : 200,
-                    "message" : "File Uploaded",
-                    "user_msg" : f"Your file <b>'{uploaded_file.name}'</b> has been uploaded. You can now chat with it.",
-                    "redirect_url" : f"/chat?state={request.POST['room_id']}"
-                }), safe=False)
+                if file_upload_handler(file_url):
+                    return JsonResponse(json.dumps({
+                        "status_code" : 200,
+                        "message" : "File Uploaded",
+                        "user_msg" : f"Your file <b>'{uploaded_file.name}'</b> has been uploaded. You can now chat with it.",
+                        "redirect_url" : f"/chat?state={request.POST['room_id']}"
+                    }), safe=False)
         return JsonResponse(json.dumps({
             "status_code" : 403,
             "message" : "FAIL : file_not_pdf"

@@ -2,31 +2,9 @@ import json, os
 from urllib.parse import parse_qsl
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from gpt_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
-from langchain import OpenAI
-
-os.environ["OPENAI_API_KEY"] = "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"
-
-def construct_index(directory_path):
-    max_input_size = 4096
-    num_outputs = 256
-    max_chunk_overlap = 20
-    chunk_size_limit = 600
-
-    llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=num_outputs))
-    prompt_helper = PromptHelper(max_input_size, num_outputs, max_chunk_overlap, chunk_size_limit=chunk_size_limit)
- 
-    documents = SimpleDirectoryReader(directory_path).load_data()
-    
-    index = GPTSimpleVectorIndex(
-        documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
-    )
-
-    index.save_to_disk('index.json')
-    return index
+from gpt_index import GPTSimpleVectorIndex
 
 def ask_lenny(query):
-    
     index = GPTSimpleVectorIndex.load_from_disk('index.json')
     while True: 
         response = index.query(query, response_mode="compact")
