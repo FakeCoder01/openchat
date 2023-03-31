@@ -7,3 +7,5 @@ django-channels
 PyPDF2
 gpt_index
 langchain
+unstructured[local-inference]
+chromadb
