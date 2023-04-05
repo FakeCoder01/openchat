@@ -23,7 +23,7 @@
                 <button class="p-2" onclick="CopyResponse(this);">
                     <i id="cpybtn" class="fas fa-copy text-gray-600 hover:text-gray-900"></i>
                 </button>
-                <button class="p-2" onclick="ClearInputArea();">
+                <button class="p-2" onclick="window.location.href='/';">
                     <i class="fas fa-times text-red-400 hover:text-red-700"></i>
                 </button>
             </div>
@@ -111,16 +111,16 @@
     }
 
     // Function to process the user's message and generate a response
-    function ProcessTheMessage(message, buttons = { "btn1": "", "btn2": "", "btn3": "" }) {
+    function ProcessTheMessage(message, buttons) {
         // Placeholder code - replace with your own logic to generate a response
         return `
                 <div class="text-gray-700 p-1">
                     <p class="my-2 mb-3">${message}</p>
-                    <!-- <div class="flex justify-center space-x-4">
-                    <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">${buttons.btn1}</button>
-                    <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">${buttons.btn2}</button>
-                    <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">${buttons.btn3}</button>
-                    </div> -->
+                    <div class="flex justify-center space-x-4">
+                    <button onclick="buttonQuestionAsk(this);" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">${buttons.btn1}</button>
+                    <button onclick="buttonQuestionAsk(this);" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">${buttons.btn2}</button>
+                    <button onclick="buttonQuestionAsk(this);" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">${buttons.btn3}</button>
+                    </div>
                 </div>
             `;
     }
@@ -133,7 +133,13 @@
     {
         room_id = uri.searchParams.get("state");
     }
-    let url = `ws://${window.location.host}/ws/socket-server/chat/?room_id=${room_id}`
+
+    let bookName = room_id;
+    if (uri.searchParams.get("book") && uri.searchParams.get("book") != "") 
+    {
+        bookName = uri.searchParams.get("book").toLowerCase();
+    }
+    let url = `ws://${window.location.host}/ws/socket-server/chat/?room_id=${room_id}`;
 
     const chatSocket = new WebSocket(url)
 
@@ -159,10 +165,9 @@
 
     let form = document.getElementById('form')
     form.addEventListener('submit', (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (document.getElementById("file_input").value != "") {
-            // upload the file
 
             const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             const fileInput = document.getElementById('file_input');
@@ -197,7 +202,8 @@
                 chatSocket.send(JSON.stringify({
                     'message': message,
                     'sent_by': 'user',
-                    'user': room_id,
+                    'room_id': room_id,
+                    'book' : bookName,
                 }))
             }
         }
@@ -215,6 +221,17 @@
         a.document.write(divContents);
         a.document.close();
         a.print();
+    }
+
+    function buttonQuestionAsk(pressedBtn){
+        const q_text = pressedBtn.textContent;
+        chatSocket.send(JSON.stringify({
+            'message': q_text,
+            'sent_by': 'user',
+            'room_id': room_id,
+            'book' : bookName,
+        }))
+
     }
 
 </script>

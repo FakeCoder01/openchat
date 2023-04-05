@@ -1,38 +1,26 @@
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import Chroma
-from langchain.text_splitter import CharacterTextSplitter
 from langchain.llms import OpenAI
-from langchain.chains import ConversationalRetrievalChain
-from langchain.document_loaders import PyPDFLoader, UnstructuredPDFLoader, OnlinePDFLoader
-from django.core.files.storage import FileSystemStorage
 import os
-
-from openchat.settings import BASE_DIR
+from gpt_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper 
 
 
 os.environ['OPENAI_API_KEY'] = "API_KEY"
-def file_upload_handler(file_url):
-    if True:
-        print(file_url)
-    
-        loader = UnstructuredPDFLoader(f"{file_url}")
-
-        documents = loader.load()
-
-        ### delete file
-        fs = FileSystemStorage()
-        uploaded_file_path = fs.path(file_url)
-        fs.delete(uploaded_file_path)
-
-        text_splitter = CharacterTextSplitter(chunk_size = 1000, chunk_overlap = 0)
-        documents = text_splitter.split_documents(documents)
-        embeddings = OpenAIEmbeddings()
-        vectorstore = Chroma.from_documents(documents, embeddings)
-        retreiver = vectorstore.as_retriever()
-        qa = ConversationalRetrievalChain.from_llm(llm = OpenAI(temperature = 0), retriever = retreiver)
-
+def file_upload_handler(user_id):
+    try:
+        file_url = f"media/pdf/{user_id}.pdf"
+        max_input_size = 4096
+        num_outputs = 256
+        max_chunk_overlap = 20
+        chunk_size_limit = 600
+        llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=num_outputs))
+        prompt_helper = PromptHelper(max_input_size, num_outputs, max_chunk_overlap, chunk_size_limit=chunk_size_limit)
+        documents = SimpleDirectoryReader(input_files=[file_url, ]).load_data()
+        index = GPTSimpleVectorIndex(
+            documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
+        )
+        index.save_to_disk(f'media/file-data/{user_id}_data.json')
+        os.remove(file_url)
         return True
-    # except Exception as err:
-    #     print(err)
-    #     return False
+    except Exception as err:
+        print(err)
+        return False
     

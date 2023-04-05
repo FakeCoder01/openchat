@@ -13,6 +13,27 @@
 <body class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700">
     <div class="px-28 py-20 flex flex-col items-center justify-center text-center">
         <h1 class="text-4xl font-semibold p-5 text-gray-100">Talk to any PDF</h1>
+
+        <div class="bg-white py-4 sm:py-2">
+            <h2 class="font-semibold">Select from pre-loaded books</h2>
+            <div class="bg-white p-4">
+                <button onclick="readBookOnSelect(this);" class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md" data-bookname="physics">
+                  Physics
+                </button>
+              
+                <button onclick="readBookOnSelect(this);" class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md" data-bookname="math">
+                    Mathematics
+                </button>
+              
+                <button onclick="readBookOnSelect(this);" class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md" data-bookname="chemistry">
+                    Chemistry
+                </button>
+              </div>
+        </div>
+          
+        
+
+
         <div class="p-3 flex">
             <div
                 class="px-2 py-1 m-2 font-mono border-2 border-gray-500 text-gray-50 hover:bg-gradient-to-r from-gray-700 via-gray-600 to-gray-500 cursor-pointer">
@@ -115,6 +136,14 @@
                     })
                     .catch(error => console.error(error));
             }
+        }
+
+        function readBookOnSelect(bookName){
+            if(bookName.getAttribute('data-bookname') != ''){
+                bookName = bookName.getAttribute('data-bookname');
+                window.location.href = "/chat?state=" + room_id + "&book=" + bookName + "&utm_source=LANDING_FILE_UPLOAD";
+            }
+            return false;
         }
     </script>
 </body>

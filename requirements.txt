@@ -7,3 +7,4 @@ django-channels
 PyPDF2
 gpt_index
 langchain
+PyCryptodome

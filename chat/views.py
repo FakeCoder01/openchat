@@ -59,6 +59,7 @@ def logout_user(request):
 def handleFileUpload(request):
     if request.method == 'POST' and request.FILES['pdf_file'] and request.POST['room_id']:
         uploaded_file = request.FILES['pdf_file']
+        room_id = str(request.POST['room_id'])
         if uploaded_file.name.endswith('.pdf'):
             with uploaded_file.open('rb') as f:
                 pdf_reader = PyPDF2.PdfReader(f)
@@ -68,12 +69,9 @@ def handleFileUpload(request):
                         "status_code" : 402,
                         "message" : "FAIL : max_size_exceeded (max 5 pages)"
                     }), safe=False)
-
                 fs = FileSystemStorage()
-                f_name = str(request.POST['room_id']).replace(" ", "")
-                filename = fs.save(f"{f_name}.pdf", uploaded_file)
-                file_url = fs.url(filename)
-                if file_upload_handler(file_url):
+                filename = fs.save(f"pdf/{room_id}.pdf", uploaded_file)
+                if file_upload_handler(room_id):
                     return JsonResponse(json.dumps({
                         "status_code" : 200,
                         "message" : "File Uploaded",
