@@ -1,10 +1,14 @@
 django
 requests
-daphane
+daphne
 openai
-urllib
+urllib3
 django-channels
 PyPDF2
 gpt_index
 langchain
 PyCryptodome
+unstructured
+unstructured[local-inference]
+chromadb
+faiss-cpu

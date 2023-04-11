@@ -8,7 +8,7 @@ from django.utils.crypto import get_random_string
 import json, PyPDF2
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
-from .file_handler import file_upload_handler
+from .file_handler import file_and_conversation
 
 # Create your views here.
 
@@ -71,7 +71,7 @@ def handleFileUpload(request):
                     }), safe=False)
                 fs = FileSystemStorage()
                 filename = fs.save(f"pdf/{room_id}.pdf", uploaded_file)
-                if file_upload_handler(room_id):
+                if file_and_conversation(room_id):
                     return JsonResponse(json.dumps({
                         "status_code" : 200,
                         "message" : "File Uploaded",

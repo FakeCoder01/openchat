@@ -1,26 +1,31 @@
 from langchain.llms import OpenAI
-import os
+import os, openai, faiss, langchain
 from gpt_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper 
+
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.document_loaders import PyPDFLoader, UnstructuredPDFLoader, OnlinePDFLoader
 
 
 os.environ['OPENAI_API_KEY'] = "API_KEY"
-def file_upload_handler(user_id):
+
+
+def file_and_conversation(user_id):
     try:
         file_url = f"media/pdf/{user_id}.pdf"
-        max_input_size = 4096
-        num_outputs = 256
-        max_chunk_overlap = 20
-        chunk_size_limit = 600
-        llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=num_outputs))
-        prompt_helper = PromptHelper(max_input_size, num_outputs, max_chunk_overlap, chunk_size_limit=chunk_size_limit)
-        documents = SimpleDirectoryReader(input_files=[file_url, ]).load_data()
-        index = GPTSimpleVectorIndex(
-            documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
-        )
-        index.save_to_disk(f'media/file-data/{user_id}_data.json')
+        save_directory = f"faiss-data/{user_id}/"
+
+        loader = UnstructuredPDFLoader(file_url)
+        documents = loader.load()
+        text_splitter = CharacterTextSplitter(chunk_size = 1000, chunk_overlap = 0)
+        documents = text_splitter.split_documents(documents)
+        embeddings = OpenAIEmbeddings()
+        vectordb = FAISS.from_documents(documents, embeddings)
+
+        vectordb.save_local(save_directory)
         os.remove(file_url)
         return True
     except Exception as err:
         print(err)
         return False
-    
