@@ -11,7 +11,7 @@ from .models import ChatHistory
 from langchain.llms import OpenAI
 
 
-os.environ['OPENAI_API_KEY'] = "API_KEY"
+os.environ['OPENAI_API_KEY'] = "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"
 def ask_lenny(query, room_id):
     try:
         chat_history_qs = ChatHistory.objects.filter(user_id=room_id)
