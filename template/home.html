@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -8,41 +8,127 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/258973f2c5.js" crossorigin="anonymous"></script>
     <title>Talk to pdf</title>
+
+    <style>
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700">
-    <div class="px-28 py-20 flex flex-col items-center justify-center text-center">
-        <h1 class="text-4xl font-semibold p-5 text-gray-100">Talk to any PDF</h1>
+<body class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600">
 
-        <div class="bg-white py-4 sm:py-2">
+    <nav class="bg-opacity-25 bg-white backdrop-filter backdrop-blur-lg fixed top-0 w-full z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div>
+                <a href="#" class="text-gray-200 font-semibold text-lg md:text-xl hover:text-gray-300">
+                    Home
+                </a>
+            </div>
+            <div class="flex space-x-4">
+                <a href="#dp-box" class="font-semibold text-gray-100 hover:text-gray-300">
+                    Upload Book
+                </a>
+                <a href="#" class="font-semibold text-gray-100 hover:text-gray-300">
+                    About
+                </a>
+                <a href="#" class="font-semibold text-gray-100 hover:text-gray-300">
+                    Profile
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="px-28 py-20 flex flex-col items-center justify-center text-center">
+
+        <div class="container mx-auto py-8 flex flex-col justify-center items-center">
+            <h2 class="text-3xl p-5 font-semibold font-mono mb-4 text-white">My Bookshelf</h2>
+            <div class="flex overflow-x-scroll w-[80%]">
+                <div
+                    class="flex-none w-48 rounded-lg bg-gray-100 shadow-lg p-4 mr-4 shelf-box hover:scale-105 transition-transform duration-300 hover:bg-gradient-to-r from-gray-400 via-gray-300 to-gray-200">
+                    <a href="#" class="block">
+                        <img src="/static/img/bengali.jpg" alt="Bengali" class="w-44 h-48 object-cover mb-2">
+                        <h3 class="text-base font-mono font-semibold">Bangla Book</h3>
+                    </a>
+                </div>
+                <div onclick="readBookOnSelect(this)" data-bookname="chemistry"
+                    class="flex-none w-48 rounded-lg bg-gray-100 shadow-lg p-4 mr-4 shelf-box hover:scale-105 transition-transform duration-300 hover:bg-gradient-to-r from-gray-400 via-gray-300 to-gray-200">
+                    <a href="#" class="block">
+                        <img src="/static/img/chemistry.jpg" alt="chemistry" class="w-44 h-48 object-cover mb-2">
+                        <h3 class="text-base font-mono font-semibold">Chemistry</h3>
+                    </a>
+                </div>
+                <div onclick="readBookOnSelect(this)" data-bookname="physics"
+                    class="flex-none w-48 rounded-lg bg-gray-100 shadow-lg p-4 mr-4 shelf-box hover:scale-105 transition-transform duration-300 hover:bg-gradient-to-r from-gray-400 via-gray-300 to-gray-200">
+                    <a href="#" class="block">
+                        <img src="/static/img/physics.jpg" alt="physics" class="w-44 h-48 object-cover mb-2">
+                        <h3 class="text-base font-mono font-semibold">Physics</h3>
+                    </a>
+                </div>
+                <div
+                    class="flex-none w-48 rounded-lg bg-gray-100 shadow-lg p-4 mr-4 shelf-box hover:scale-105 transition-transform duration-300 hover:bg-gradient-to-r from-gray-400 via-gray-300 to-gray-200">
+                    <a href="#" class="block">
+                        <img src="/static/img/english.jpg" alt="english" class="w-44 h-48 object-cover mb-2">
+                        <h3 class="text-base font-mono font-semibold">English</h3>
+                    </a>
+                </div>
+                <div onclick="readBookOnSelect(this)" data-bookname="math"
+                    class="flex-none w-48 rounded-lg bg-gray-100 shadow-lg p-4 mr-4 shelf-box hover:scale-105 transition-transform duration-300 hover:bg-gradient-to-r from-gray-400 via-gray-300 to-gray-200">
+                    <a href="#" class="block">
+                        <img src="/static/img/maths.jpg" alt="maths" class="w-44 h-48 object-cover mb-2">
+                        <h3 class="text-base font-mono font-semibold">Mathematics</h3>
+                    </a>
+                </div>
+                <div onclick="readBookOnSelect(this)" data-bookname="math"
+                    class="flex-none w-48 rounded-lg bg-gray-100 shadow-lg p-4 mr-4 shelf-box hover:scale-105 transition-transform duration-300 hover:bg-gradient-to-r from-gray-400 via-gray-300 to-gray-200">
+                    <a href="#" class="block">
+                        <img src="/static/img/maths.jpg" alt="maths" class="w-44 h-48 object-cover mb-2">
+                        <h3 class="text-base font-mono font-semibold">Mathematics</h3>
+                    </a>
+                </div>
+                <div onclick="readBookOnSelect(this)" data-bookname="math"
+                    class="flex-none w-48 rounded-lg bg-gray-100 shadow-lg p-4 mr-4 shelf-box hover:scale-105 transition-transform duration-300 hover:bg-gradient-to-r from-gray-400 via-gray-300 to-gray-200">
+                    <a href="#" class="block">
+                        <img src="/static/img/maths.jpg" alt="maths" class="w-44 h-48 object-cover mb-2">
+                        <h3 class="text-base font-mono font-semibold">Mathematics</h3>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- <h1 class="text-4xl font-semibold p-5 text-gray-100">Talk to any PDF</h1> -->
+
+        <!-- <div class="bg-white py-4 sm:py-2">
             <h2 class="font-semibold">Select from pre-loaded books</h2>
             <div class="bg-white p-4">
-                <button onclick="readBookOnSelect(this);" class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md" data-bookname="physics">
-                  Physics
+                <button onclick="readBookOnSelect(this);"
+                    class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md"
+                    data-bookname="physics">
+                    Physics
                 </button>
-              
-                <button onclick="readBookOnSelect(this);" class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md" data-bookname="math">
+
+                <button onclick="readBookOnSelect(this);"
+                    class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md"
+                    data-bookname="math">
                     Mathematics
                 </button>
-              
-                <button onclick="readBookOnSelect(this);" class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md" data-bookname="chemistry">
+
+                <button onclick="readBookOnSelect(this);"
+                    class="inline-flex items-center px-4 py-2 bg-gray-300 hover:bg-indigo-400 text-gray-800 text-sm font-medium rounded-md"
+                    data-bookname="chemistry">
                     Chemistry
                 </button>
-              </div>
-        </div>
-          
-        
+            </div>
+        </div> -->
 
-
-        <div class="p-3 flex">
+        <!-- <div class="p-3 flex">
             <div
                 class="px-2 py-1 m-2 font-mono border-2 border-gray-500 text-gray-50 hover:bg-gradient-to-r from-gray-700 via-gray-600 to-gray-500 cursor-pointer">
                 <i class="fa-brands fa-discord"></i>
                 <a href="">Join Discord</a>
             </div>
-        </div>
+        </div> -->
 
-        <div class="drop-box w-9/12 h-52 border-2 border-dashed bg-gradient-to-r from-gray-300 via-gray-200 to-gray-100 border-gray-400 flex justify-center items-center text-xl rounded-lg"
+        <div id="dp-box" class="drop-box w-9/12 h-52 border-2 border-dashed bg-gradient-to-r from-gray-300 via-gray-200 to-gray-100 border-gray-400 flex justify-center items-center text-xl rounded-lg"
             ondrop="handleDrop(event)" ondragover="event.preventDefault()">
             <form method="post" enctype="multipart/form-data"> {% csrf_token %}
                 <div class="flex flex-col justify-center items-center">
@@ -138,8 +224,8 @@
             }
         }
 
-        function readBookOnSelect(bookName){
-            if(bookName.getAttribute('data-bookname') != ''){
+        function readBookOnSelect(bookName) {
+            if (bookName.getAttribute('data-bookname') != '') {
                 bookName = bookName.getAttribute('data-bookname');
                 window.location.href = "/chat?state=" + room_id + "&book=" + bookName + "&utm_source=LANDING_FILE_UPLOAD";
             }
