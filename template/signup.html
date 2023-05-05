@@ -8,9 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-
     <div class="container">
-
         {% if messages %}
             <div class="alerts-list absolute right-0 mr-4">
                 {% for message in messages %}
@@ -21,20 +19,18 @@
                 {% endfor %}
             </div>
         {% endif %}
-
         <div class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-lg">
                 <h1 class="text-center text-2xl font-bold text-red-600 sm:text-3xl">
                     Sign up into Chat
                 </h1>
-
                 <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
                     Create an account to ask questions
                 </p>
-
                 <form action="" method="POST" class="mt-6 mb-0 space-y-4 rounded-lg p-8 shadow-2xl">
                     <p class="text-lg font-medium">Sign in to your account</p>
                     {% csrf_token %}
+
                     <div>
                         <label for="email" class="text-sm font-medium">Email</label>
 
@@ -73,10 +69,6 @@
                         </div>
                     </div>
 
-
-
-
-
                     <div>
                         <label for="confirm_password" class="text-sm font-medium">Confirm Password</label>
 
@@ -97,20 +89,14 @@
                         </div>
                     </div>
 
-    
-
                     <button type="submit"
                         class="block w-full rounded-lg bg-red-600 px-5 py-3 text-sm font-medium text-white">
                         Register
                     </button>
 
-                    
                 </form>
             </div>
         </div>
-
     </div>
-
-
 </body>
-</html>    
+</html>
